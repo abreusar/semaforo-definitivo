@@ -1,0 +1,466 @@
+/* ============================================================
+   SEÇÃO ACADÊMICA — Painéis Teóricos
+   ============================================================ */
+
+.academic-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 20px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Card base ── */
+.acad-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  transition: border-color .3s;
+}
+.acad-card:hover {
+  border-color: var(--border2);
+}
+
+.acad-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.acad-icon {
+  font-size: 20px;
+}
+.acad-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.acad-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.acad-desc strong {
+  color: var(--accent);
+}
+
+/* ── Tabelas ── */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 4px;
+}
+.acad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.acad-table th {
+  background: var(--bg);
+  color: var(--text-dim);
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.acad-table td {
+  padding: 7px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  transition: background .3s;
+  color: var(--text);
+}
+.acad-table tbody tr:hover td {
+  background: rgba(64, 144, 255, .05);
+}
+.acad-table tbody tr.active-row td {
+  background: rgba(64, 144, 255, .12);
+}
+
+.val-on  { color: var(--green-on) !important; font-weight: 700; }
+.val-off { color: var(--text-dim) !important; }
+
+/* ── Badges de estado ── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .1em;
+}
+.badge-e1 { background: rgba(0, 224, 80, .15); color: var(--green-on); border: 1px solid var(--green-on); }
+.badge-e2 { background: rgba(255, 170, 0, .15); color: var(--amber-on); border: 1px solid var(--amber-on); }
+.badge-e3 { background: rgba(64, 144, 255, .15); color: var(--accent2); border: 1px solid var(--accent2); }
+.badge-e4 { background: rgba(255, 130, 50, .15); color: #ff8232; border: 1px solid #ff8232; }
+
+/* ── Tags de cor (Verde/Amarelo/Vermelho) ── */
+.color-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .05em;
+}
+.color-tag.verde    { background: rgba(0, 224, 80, .15); color: var(--green-on); }
+.color-tag.amarelo  { background: rgba(255, 170, 0, .15); color: var(--amber-on); }
+.color-tag.vermelho { background: rgba(255, 32, 32, .15); color: var(--red-on); }
+
+/* ── Tabela de Decisão (entradas externas) ── */
+.td-justify {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: left !important;
+  letter-spacing: .03em;
+}
+
+/* ── Lógica Proposicional ── */
+.logic-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.logic-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  transition: border-color .3s, background .3s;
+}
+.logic-rule.valid {
+  border-color: rgba(0, 224, 80, .3);
+  background: rgba(0, 224, 80, .04);
+}
+.logic-rule.invalid {
+  border-color: rgba(255, 32, 32, .3);
+  background: rgba(255, 32, 32, .04);
+}
+.rule-status {
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+  line-height: 1.2;
+}
+.logic-rule.valid .rule-status   { color: var(--green-on); }
+.logic-rule.invalid .rule-status { color: var(--red-on); }
+
+.rule-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rule-formula {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+.rule-explain {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.rule-eval {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+
+/* ── MEF (Máquina de Estados Finitos) ── */
+.fsm-definition {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.fsm-item {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+}
+.fsm-key {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 160px;
+  letter-spacing: .04em;
+}
+.fsm-val {
+  color: var(--text);
+}
+
+.fsm-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 16px 10px;
+}
+.fsm-node {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border2);
+  background: var(--bg);
+  transition: all .4s ease;
+}
+.fsm-node.active {
+  border-color: var(--accent2);
+  background: rgba(64, 144, 255, .12);
+  box-shadow: 0 0 16px rgba(64, 144, 255, .3);
+}
+.fsm-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: .08em;
+}
+.fsm-node.active .fsm-label {
+  color: var(--accent2);
+}
+.fsm-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  opacity: .6;
+}
+.fsm-arrow {
+  font-size: 20px;
+  color: var(--text-dim);
+}
+.fsm-loop-arrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: 8px;
+}
+
+.fsm-transitions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.fsm-trans-label {
+  color: var(--text-dim);
+  letter-spacing: .08em;
+}
+.fsm-trans {
+  color: var(--text);
+  padding: 2px 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+/* ── Diagrama de Grafo Direcionado (SVG) ── */
+.graph-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+.graph-svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+/* Nós do grafo */
+.graph-node {
+  fill: var(--surface2);
+  stroke: var(--border2);
+  stroke-width: 2;
+  transition: fill .4s, stroke .4s;
+}
+.graph-node.active {
+  fill: rgba(64, 144, 255, .2);
+  stroke: var(--accent2);
+  filter: drop-shadow(0 0 8px rgba(64, 144, 255, .4));
+}
+
+/* Labels dos nós */
+.graph-node-label {
+  fill: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: .08em;
+}
+.graph-node-sub {
+  fill: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+/* Labels das arestas */
+.graph-edge-label {
+  fill: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* Legenda do grafo */
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.graph-legend-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.graph-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-e1 { background: var(--green-on); }
+.dot-e2 { background: var(--amber-on); }
+.dot-e3 { background: var(--accent2); }
+.dot-e4 { background: #ff8232; }
+
+/* ── Teoria dos Conjuntos ── */
+.sets-group {
+  margin-bottom: 14px;
+}
+.sets-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.sets-title small {
+  font-weight: 400;
+  color: var(--text-dim);
+  text-transform: none;
+}
+.set-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(42, 48, 69, .4);
+}
+.set-name {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--accent2);
+  font-weight: 700;
+  min-width: 160px;
+  letter-spacing: .04em;
+}
+.set-val {
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+}
+.set-note {
+  color: var(--text-dim);
+  font-size: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.set-highlight {
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+/* ── Pertencimento dinâmico ── */
+.set-membership {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.membership-line {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.membership-line.member {
+  color: var(--green-on);
+  background: rgba(0, 224, 80, .06);
+}
+.membership-line.not-member {
+  color: var(--text-dim);
+  background: transparent;
+}
+.membership-symbol {
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 600px) {
+  .academic-section { padding: 10px; }
+  .acad-card { padding: 14px 12px; }
+  .acad-header h2 { font-size: 13px; }
+  .set-name { min-width: 120px; }
+  .fsm-key { min-width: 120px; }
+  .fsm-node { width: 48px; height: 48px; }
+  .fsm-label { font-size: 12px; }
+  .graph-svg { max-width: 280px; }
+  .graph-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

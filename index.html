@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semáforo Inteligente — A3 Matemática Computacional</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/academic.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="main-header">
+    <h1>🚦 Semáforo Inteligente</h1>
+    <p class="subtitle">A3 — Matemática Computacional Aplicada</p>
+  </header>
+
+  <!-- ===== PAINEL DE CONTROLE ===== -->
+  <section class="control-panel">
+    <div class="control-buttons">
+      <button id="btnStart" onclick="startSystem()">▶ Iniciar</button>
+      <button id="btnNext" onclick="nextState()">⏭ Próximo Estado</button>
+      <button id="btnPed" class="btn-ped" onclick="requestPedestrian()">🚶 Pedestre Solicita</button>
+      <button id="btnEmergency" class="btn-emergency" onclick="toggleEmergency()">🚨 Emergência</button>
+    </div>
+    <div class="status-bar">
+      <span class="status-label">Estado:</span>
+      <span class="status-value" id="currentStateLabel">E1</span>
+      <span class="status-label">Tempo:</span>
+      <span class="status-value" id="countdownLabel">26s</span>
+      <span class="status-badge hidden" id="pedBadge">🚶 PEDESTRE SOLICITOU</span>
+      <span class="status-badge emergency-badge hidden" id="emergencyBadge">🚨 EMERGÊNCIA ATIVA</span>
+    </div>
+  </section>
+
+  <!-- ===== SIMULAÇÃO VISUAL DO CRUZAMENTO ===== -->
+  <section class="simulation-section">
+    <div class="crossroad" id="crossroad">
+
+      <!-- Semáforo Via A (veículos) -->
+      <div class="traffic-light tl-via-a" id="tlViaA">
+        <span class="tl-label">Via A</span>
+        <div class="light red" id="tl-a-red"></div>
+        <div class="light yellow" id="tl-a-yellow"></div>
+        <div class="light green" id="tl-a-green"></div>
+      </div>
+
+      <!-- Semáforo Via B (veículos) -->
+      <div class="traffic-light tl-via-b" id="tlViaB">
+        <span class="tl-label">Via B</span>
+        <div class="light red" id="tl-b-red"></div>
+        <div class="light yellow" id="tl-b-yellow"></div>
+        <div class="light green" id="tl-b-green"></div>
+      </div>
+
+      <!-- Semáforo Pedestres Via A -->
+      <div class="ped-light ped-via-a" id="pedViaA">
+        <span class="tl-label">Ped A</span>
+        <div class="ped-indicator" id="ped-a-indicator">🚶</div>
+      </div>
+
+      <!-- Semáforo Pedestres Via B -->
+      <div class="ped-light ped-via-b" id="pedViaB">
+        <span class="tl-label">Ped B</span>
+        <div class="ped-indicator" id="ped-b-indicator">🚶</div>
+      </div>
+
+      <!-- Ruas visuais -->
+      <div class="road road-horizontal">
+        <span class="road-label">Via A (Leste → Oeste)</span>
+      </div>
+      <div class="road road-vertical">
+        <span class="road-label">Via B (Norte → Sul)</span>
+      </div>
+      <div class="intersection"></div>
+
+      <!-- Overlay de emergência -->
+      <div class="emergency-overlay hidden" id="emergencyOverlay">
+        <span class="emergency-text">🚨 EMERGÊNCIA 🚨</span>
+        <span class="emergency-sub">Todos os semáforos em VERMELHO</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO ACADÊMICA ===== -->
+  <section class="academic-section">
+
+    <!-- ── 1. Representação Binária ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Representação Binária dos Estados</h2>
+      </div>
+      <p class="acad-desc">
+        Cada estado é representado por 6 variáveis binárias: <strong>A</strong> (Via A verde),
+        <strong>B</strong> (Via B verde), <strong>PA</strong> (Pedestre Via A liberado),
+        <strong>PB</strong> (Pedestre Via B liberado), <strong>YA</strong> (Via A amarelo),
+        <strong>YB</strong> (Via B amarelo).
+      </p>
+      <div class="table-wrapper">
+        <table class="acad-table" id="binaryTable">
+          <thead>
+            <tr>
+              <th>Estado</th><th>A</th><th>B</th><th>PA</th><th>PB</th>
+              <th>YA</th><th>YB</th><th>Via A</th><th>Via B</th>
+              <th>Ped A</th><th>Ped B</th><th>Duração</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-state="E1">
+              <td class="state-cell"><span class="badge badge-e1">E1</span></td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td>26s</td>
+            </tr>
+            <tr data-state="E2">
+              <td class="state-cell"><span class="badge badge-e2">E2</span></td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td><span class="color-tag amarelo">Amarelo</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td>4s</td>
+            </tr>
+            <tr data-state="E3">
+              <td class="state-cell"><span class="badge badge-e3">E3</span></td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td>26s</td>
+            </tr>
+            <tr data-state="E4">
+              <td class="state-cell"><span class="badge badge-e4">E4</span></td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td><span class="color-tag amarelo">Amarelo</span></td>
+              <td><span class="color-tag verde">Verde</span></td>
+              <td><span class="color-tag vermelho">Vermelho</span></td>
+              <td>4s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── 2. Tabela-Verdade / Tabela de Decisão ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Tabela-Verdade / Tabela de Decisão</h2>
+      </div>
+      <p class="acad-desc">
+        Codificação dos estados com 2 bits (<strong>Q1 Q0</strong>) e saídas lógicas correspondentes.
+      </p>
+      <div class="table-wrapper">
+        <table class="acad-table" id="truthTable">
+          <thead>
+            <tr>
+              <th>Q1</th><th>Q0</th><th>Estado</th>
+              <th>A (Via A Verde)</th><th>YA (Via A Amarelo)</th>
+              <th>B (Via B Verde)</th><th>YB (Via B Amarelo)</th>
+              <th>PA (Ped Via A)</th><th>PB (Ped Via B)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-state="E1">
+              <td>0</td><td>0</td>
+              <td><span class="badge badge-e1">E1</span></td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+            </tr>
+            <tr data-state="E2">
+              <td>0</td><td>1</td>
+              <td><span class="badge badge-e2">E2</span></td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+            </tr>
+            <tr data-state="E3">
+              <td>1</td><td>0</td>
+              <td><span class="badge badge-e3">E3</span></td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+            </tr>
+            <tr data-state="E4">
+              <td>1</td><td>1</td>
+              <td><span class="badge badge-e4">E4</span></td>
+              <td class="val-off">0</td><td class="val-off">0</td>
+              <td class="val-off">0</td><td class="val-on">1</td>
+              <td class="val-on">1</td><td class="val-off">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── 3. NOVO: Tabela de Decisão com Entradas Externas ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Tabela de Decisão — Entradas Externas</h2>
+      </div>
+      <p class="acad-desc">
+        Análise das combinações de entradas externas (<strong>VA</strong> = veículos Via A,
+        <strong>VB</strong> = veículos Via B, <strong>Ped</strong> = pedestre solicitou)
+        e o comportamento resultante do sistema.
+      </p>
+      <div class="table-wrapper">
+        <table class="acad-table" id="decisionTable">
+          <thead>
+            <tr>
+              <th>VA</th><th>VB</th><th>Ped</th>
+              <th>Comportamento</th><th>Prioridade</th><th>Justificativa Lógica</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="val-off">0</td><td class="val-off">0</td><td class="val-off">0</td>
+              <td>Ciclo normal</td>
+              <td><span class="badge badge-e1">Padrão</span></td>
+              <td class="td-justify">¬VA ∧ ¬VB ∧ ¬Ped → ciclo mantido</td>
+            </tr>
+            <tr>
+              <td class="val-on">1</td><td class="val-off">0</td><td class="val-off">0</td>
+              <td>Via A priorizada</td>
+              <td><span class="badge badge-e1">Via A</span></td>
+              <td class="td-justify">VA ∧ ¬VB → mantém E1 (Via A verde)</td>
+            </tr>
+            <tr>
+              <td class="val-off">0</td><td class="val-on">1</td><td class="val-off">0</td>
+              <td>Via B priorizada</td>
+              <td><span class="badge badge-e3">Via B</span></td>
+              <td class="td-justify">¬VA ∧ VB → acelera para E3 (Via B verde)</td>
+            </tr>
+            <tr>
+              <td class="val-on">1</td><td class="val-on">1</td><td class="val-off">0</td>
+              <td>Ciclo normal</td>
+              <td><span class="badge badge-e2">Equilibrado</span></td>
+              <td class="td-justify">VA ∧ VB → ambas ocupadas, ciclo justo</td>
+            </tr>
+            <tr>
+              <td class="val-off">0</td><td class="val-off">0</td><td class="val-on">1</td>
+              <td>Pedestre imediato</td>
+              <td><span class="badge badge-e3">Pedestre</span></td>
+              <td class="td-justify">¬VA ∧ ¬VB ∧ Ped → sem veículos, pedestre livre</td>
+            </tr>
+            <tr>
+              <td class="val-on">1</td><td class="val-off">0</td><td class="val-on">1</td>
+              <td>Transição acelerada</td>
+              <td><span class="badge badge-e2">Pedestre</span></td>
+              <td class="td-justify">VA ∧ Ped → reduz tempo verde, libera pedestre</td>
+            </tr>
+            <tr>
+              <td class="val-off">0</td><td class="val-on">1</td><td class="val-on">1</td>
+              <td>Transição acelerada</td>
+              <td><span class="badge badge-e4">Pedestre</span></td>
+              <td class="td-justify">VB ∧ Ped → reduz tempo verde, libera pedestre</td>
+            </tr>
+            <tr>
+              <td class="val-on">1</td><td class="val-on">1</td><td class="val-on">1</td>
+              <td>Transição acelerada</td>
+              <td><span class="badge badge-e2">Pedestre</span></td>
+              <td class="td-justify">VA ∧ VB ∧ Ped → pedestre prioridade sobre ciclo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="acad-desc" style="margin-top:12px; font-style:italic;">
+        💡 Quando um pedestre solicita travessia durante um estado verde (E1 ou E3),
+        o tempo restante é reduzido para <strong>5 segundos</strong>, acelerando a transição.
+      </p>
+    </div>
+
+    <!-- ── 4. Lógica Proposicional ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Regras de Lógica Proposicional</h2>
+      </div>
+      <p class="acad-desc">
+        Validação em tempo real das regras lógicas que garantem a segurança do cruzamento.
+      </p>
+      <div class="logic-rules" id="logicRules">
+        <div class="logic-rule" id="rule1">
+          <span class="rule-status" id="rule1-icon">✓</span>
+          <div class="rule-body">
+            <span class="rule-formula">¬(A ∧ B)</span>
+            <span class="rule-explain">Regra de segurança — as duas vias nunca podem abrir simultaneamente</span>
+            <span class="rule-eval" id="rule1-eval"></span>
+          </div>
+        </div>
+        <div class="logic-rule" id="rule2">
+          <span class="rule-status" id="rule2-icon">✓</span>
+          <div class="rule-body">
+            <span class="rule-formula">PA = ¬A ∧ ¬YA</span>
+            <span class="rule-explain">Pedestres Via A só cruzam quando Via A não está verde nem amarela</span>
+            <span class="rule-eval" id="rule2-eval"></span>
+          </div>
+        </div>
+        <div class="logic-rule" id="rule3">
+          <span class="rule-status" id="rule3-icon">✓</span>
+          <div class="rule-body">
+            <span class="rule-formula">PB = ¬B ∧ ¬YB</span>
+            <span class="rule-explain">Pedestres Via B só cruzam quando Via B não está verde nem amarela</span>
+            <span class="rule-eval" id="rule3-eval"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 5. Máquina de Estados Finitos ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Máquina de Estados Finitos (MEF)</h2>
+      </div>
+      <p class="acad-desc">
+        O sistema é implementado como uma MEF determinística com 4 estados, transições
+        automáticas temporizadas e ciclo contínuo.
+      </p>
+      <div class="fsm-definition">
+        <div class="fsm-item"><span class="fsm-key">Q (estados)</span><span class="fsm-val">= { E1, E2, E3, E4 }</span></div>
+        <div class="fsm-item"><span class="fsm-key">Σ (alfabeto)</span><span class="fsm-val">= { tick (pulso de 1 segundo) }</span></div>
+        <div class="fsm-item"><span class="fsm-key">q₀ (estado inicial)</span><span class="fsm-val">= E1</span></div>
+        <div class="fsm-item"><span class="fsm-key">F (estados finais)</span><span class="fsm-val">= N/A (ciclo contínuo)</span></div>
+      </div>
+      <div class="fsm-diagram">
+        <div class="fsm-node" id="fsm-E1" data-state="E1">
+          <span class="fsm-label">E1</span>
+          <span class="fsm-time">26s</span>
+        </div>
+        <div class="fsm-arrow">→</div>
+        <div class="fsm-node" id="fsm-E2" data-state="E2">
+          <span class="fsm-label">E2</span>
+          <span class="fsm-time">4s</span>
+        </div>
+        <div class="fsm-arrow">→</div>
+        <div class="fsm-node" id="fsm-E3" data-state="E3">
+          <span class="fsm-label">E3</span>
+          <span class="fsm-time">26s</span>
+        </div>
+        <div class="fsm-arrow">→</div>
+        <div class="fsm-node" id="fsm-E4" data-state="E4">
+          <span class="fsm-label">E4</span>
+          <span class="fsm-time">4s</span>
+        </div>
+        <div class="fsm-loop-arrow">
+          <span>↩ E4 → E1</span>
+        </div>
+      </div>
+      <div class="fsm-transitions">
+        <span class="fsm-trans-label">Transições (δ):</span>
+        <span class="fsm-trans">f(E1) = E2</span>
+        <span class="fsm-trans">f(E2) = E3</span>
+        <span class="fsm-trans">f(E3) = E4</span>
+        <span class="fsm-trans">f(E4) = E1</span>
+      </div>
+    </div>
+
+    <!-- ── 6. NOVO: Diagrama de Grafo Direcionado (SVG) ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Modelagem com Grafos — Grafo Direcionado</h2>
+      </div>
+      <p class="acad-desc">
+        Representação da MEF como um <strong>grafo direcionado</strong> G = (V, A), onde
+        V = {E1, E2, E3, E4} são os vértices (estados) e A = {(E1,E2), (E2,E3), (E3,E4), (E4,E1)}
+        são as arestas (transições). O grafo é <strong>cíclico</strong> e <strong>fortemente conexo</strong>.
+      </p>
+      <div class="graph-container">
+        <svg viewBox="0 0 400 400" class="graph-svg" id="graphSvg">
+          <!-- Setas (arestas) -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#4090ff" />
+            </marker>
+          </defs>
+          <!-- E1 → E2 (topo) -->
+          <line x1="145" y1="70" x2="235" y2="70" stroke="#4090ff" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="190" y="58" class="graph-edge-label">26s</text>
+          <!-- E2 → E3 (direita) -->
+          <line x1="290" y1="115" x2="290" y2="245" stroke="#4090ff" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="305" y="185" class="graph-edge-label">4s</text>
+          <!-- E3 → E4 (baixo) -->
+          <line x1="255" y1="290" x2="165" y2="290" stroke="#4090ff" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="210" y="318" class="graph-edge-label">26s</text>
+          <!-- E4 → E1 (esquerda) -->
+          <line x1="110" y1="255" x2="110" y2="125" stroke="#4090ff" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="60" y="185" class="graph-edge-label">4s</text>
+          <!-- Nós -->
+          <circle cx="110" cy="80" r="38" class="graph-node" id="graph-E1" />
+          <text x="110" y="75" class="graph-node-label">E1</text>
+          <text x="110" y="95" class="graph-node-sub">Via A ●</text>
+          <circle cx="290" cy="80" r="38" class="graph-node" id="graph-E2" />
+          <text x="290" y="75" class="graph-node-label">E2</text>
+          <text x="290" y="95" class="graph-node-sub">Amarelo A</text>
+          <circle cx="290" cy="290" r="38" class="graph-node" id="graph-E3" />
+          <text x="290" y="285" class="graph-node-label">E3</text>
+          <text x="290" y="305" class="graph-node-sub">Via B ●</text>
+          <circle cx="110" cy="290" r="38" class="graph-node" id="graph-E4" />
+          <text x="110" y="285" class="graph-node-label">E4</text>
+          <text x="110" y="305" class="graph-node-sub">Amarelo B</text>
+        </svg>
+      </div>
+      <div class="graph-legend">
+        <div class="graph-legend-item"><span class="graph-dot dot-e1"></span> E1 — Via A verde (26s)</div>
+        <div class="graph-legend-item"><span class="graph-dot dot-e2"></span> E2 — Via A amarelo (4s)</div>
+        <div class="graph-legend-item"><span class="graph-dot dot-e3"></span> E3 — Via B verde (26s)</div>
+        <div class="graph-legend-item"><span class="graph-dot dot-e4"></span> E4 — Via B amarelo (4s)</div>
+      </div>
+    </div>
+
+    <!-- ── 7. Teoria dos Conjuntos ── -->
+    <div class="acad-card">
+      <div class="acad-header">
+        <span class="acad-icon"></span>
+        <h2>Modelagem com Teoria dos Conjuntos</h2>
+      </div>
+      <p class="acad-desc">
+        O sistema é modelado usando conjuntos para representar veículos, pedestres e
+        os estados do sistema.
+      </p>
+
+      <div class="sets-group">
+        <h3 class="sets-title">Definição dos Conjuntos</h3>
+        <div class="set-line"><span class="set-name">V (veículos)</span><span class="set-val">= { v₁, v₂, v₃, ..., vₙ }</span></div>
+        <div class="set-line"><span class="set-name">VA (veículos Via A)</span><span class="set-val">⊂ V</span></div>
+        <div class="set-line"><span class="set-name">VB (veículos Via B)</span><span class="set-val">⊂ V</span></div>
+        <div class="set-line"><span class="set-name">P (pedestres)</span><span class="set-val">= { p₁, p₂, p₃, ..., pₙ }</span></div>
+        <div class="set-line"><span class="set-name">E (estados)</span><span class="set-val">= { E1, E2, E3, E4 }</span></div>
+      </div>
+
+      <div class="sets-group">
+        <h3 class="sets-title">Operações entre Conjuntos</h3>
+        <div class="set-line">
+          <span class="set-name">VA ∩ VB</span>
+          <span class="set-val">= ∅ <small class="set-note">(interseção vazia — veículo não pode estar nas duas vias)</small></span>
+        </div>
+        <div class="set-line">
+          <span class="set-name">V = VA ∪ VB</span>
+          <span class="set-val"><small class="set-note">(total de veículos é a união)</small></span>
+        </div>
+      </div>
+
+      <div class="sets-group">
+        <h3 class="sets-title">Conjuntos por Variável Binária <small>(estados onde a variável = 1)</small></h3>
+        <div class="set-line"><span class="set-name">A (Via A verde)</span><span class="set-val" id="setA">= { E1 }</span></div>
+        <div class="set-line"><span class="set-name">B (Via B verde)</span><span class="set-val" id="setB">= { E3 }</span></div>
+        <div class="set-line"><span class="set-name">PA (Ped A livre)</span><span class="set-val" id="setPA">= { E3, E4 }</span></div>
+        <div class="set-line"><span class="set-name">PB (Ped B livre)</span><span class="set-val" id="setPB">= { E1, E2 }</span></div>
+        <div class="set-line"><span class="set-name">YA (Via A amarelo)</span><span class="set-val" id="setYA">= { E2 }</span></div>
+        <div class="set-line"><span class="set-name">YB (Via B amarelo)</span><span class="set-val" id="setYB">= { E4 }</span></div>
+      </div>
+
+      <div class="sets-group">
+        <h3 class="sets-title">Operações Derivadas</h3>
+        <div class="set-line"><span class="set-name">A ∩ B</span><span class="set-val">= ∅ <small class="set-note">(comprova ¬(A ∧ B))</small></span></div>
+        <div class="set-line"><span class="set-name">A ∪ B</span><span class="set-val">= { E1, E3 }</span></div>
+        <div class="set-line"><span class="set-name">PA ∩ PB</span><span class="set-val">= ∅ <small class="set-note">(pedestres A e B nunca livres ao mesmo tempo)</small></span></div>
+        <div class="set-line"><span class="set-name">PA ∪ PB</span><span class="set-val">= { E1, E2, E3, E4 } <small class="set-note">(sempre há pedestre cruzando)</small></span></div>
+        <div class="set-line"><span class="set-name">YA ∩ YB</span><span class="set-val">= ∅ <small class="set-note">(nunca duas vias em amarelo)</small></span></div>
+        <div class="set-line"><span class="set-name">Complemento de A</span><span class="set-val">= { E2, E3, E4 }</span></div>
+        <div class="set-line"><span class="set-name">Complemento de B</span><span class="set-val">= { E1, E2, E4 }</span></div>
+      </div>
+
+      <div class="sets-group">
+        <h3 class="sets-title">Pertencimento (estado atual: <span id="setCurrentState" class="set-highlight">E1</span>)</h3>
+        <div class="set-membership" id="setMembership">
+          <!-- Preenchido pelo JS -->
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== JS — main.js ANTES de academic.js ===== -->
+  <script src="js/main.js"></script>
+  <script src="js/academic.js"></script>
+</body>
+</html>

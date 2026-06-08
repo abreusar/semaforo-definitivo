@@ -1,0 +1,496 @@
+/* ============================================================
+   VARIÁVEIS GLOBAIS (tema escuro)
+   ============================================================ */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2333;
+  --border: #2a3045;
+  --border2: #3a4565;
+  --text: #e6edf3;
+  --text-dim: #7d8590;
+  --accent: #4090ff;
+  --accent2: #4090ff;
+  --green-on: #00e050;
+  --amber-on: #ffaa00;
+  --red-on: #ff2020;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Barlow Condensed', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* Classe utilitária para esconder elementos */
+.hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.main-header {
+  text-align: center;
+  padding: 30px 20px 10px;
+}
+.main-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.subtitle {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: .1em;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   PAINEL DE CONTROLE
+   ============================================================ */
+.control-panel {
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Botões base ── */
+.control-panel button,
+.control-buttons button {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  background: rgba(64, 144, 255, .1);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.control-panel button:hover,
+.control-buttons button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Botão Pedestre ── */
+.btn-ped {
+  border-color: var(--green-on) !important;
+  color: var(--green-on) !important;
+  background: rgba(0, 224, 80, .1) !important;
+}
+.btn-ped:hover {
+  background: var(--green-on) !important;
+  color: #fff !important;
+}
+
+/* ── Botão Emergência ── */
+.btn-emergency {
+  border-color: var(--red-on) !important;
+  color: var(--red-on) !important;
+  background: rgba(255, 32, 32, .1) !important;
+}
+.btn-emergency:hover {
+  background: var(--red-on) !important;
+  color: #fff !important;
+}
+.btn-emergency.active {
+  background: var(--red-on) !important;
+  color: #fff !important;
+  animation: pulse-emergency 1.5s infinite;
+}
+
+@keyframes pulse-emergency {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 32, 32, .4); }
+  50% { box-shadow: 0 0 16px 4px rgba(255, 32, 32, .6); }
+}
+
+/* ── Barra de Status ── */
+.status-bar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+}
+.status-label {
+  color: var(--text-dim);
+}
+.status-value {
+  color: var(--accent2);
+  font-weight: 700;
+  min-width: 30px;
+}
+
+/* ── Badges de status (pedestre / emergência) ── */
+.status-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 3px 10px;
+  border-radius: 4px;
+  animation: fadeIn .3s ease;
+}
+.status-badge:not(.emergency-badge) {
+  background: rgba(0, 224, 80, .15);
+  color: var(--green-on);
+  border: 1px solid var(--green-on);
+}
+.status-badge.emergency-badge {
+  background: rgba(255, 32, 32, .15);
+  color: var(--red-on);
+  border: 1px solid var(--red-on);
+  animation: blink-badge 1s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink-badge {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .4; }
+}
+
+/* ============================================================
+   SIMULAÇÃO VISUAL DO CRUZAMENTO
+   ============================================================ */
+.simulation-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.crossroad {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 400px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color .4s;
+}
+
+/* Borda vermelha quando em emergência */
+.crossroad.emergency-active {
+  border-color: var(--red-on);
+  box-shadow: 0 0 20px rgba(255, 32, 32, .2);
+}
+
+/* ── Ruas ── */
+.road {
+  position: absolute;
+  background: #1a2233;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.road-horizontal {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 60px;
+  transform: translateY(-50%);
+  border-top: 2px dashed rgba(255, 255, 255, .1);
+  border-bottom: 2px dashed rgba(255, 255, 255, .1);
+}
+.road-vertical {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  transform: translateX(-50%);
+  border-left: 2px dashed rgba(255, 255, 255, .1);
+  border-right: 2px dashed rgba(255, 255, 255, .1);
+}
+.road-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.intersection {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  transform: translate(-50%, -50%);
+  background: #222d40;
+  border: 1px solid var(--border2);
+}
+
+/* ── Semáforos de veículos ── */
+.traffic-light {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px;
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 8px;
+  z-index: 10;
+}
+.tl-label {
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #222;
+  border: 1px solid #333;
+  transition: background .4s, box-shadow .4s;
+}
+.light.red.on    { background: var(--red-on);   box-shadow: 0 0 12px var(--red-on); }
+.light.yellow.on { background: var(--amber-on); box-shadow: 0 0 12px var(--amber-on); }
+.light.green.on  { background: var(--green-on); box-shadow: 0 0 12px var(--green-on); }
+
+/* Posições dos semáforos */
+.tl-via-a { top: 20px;  left: 20px; }
+.tl-via-b { top: 20px;  right: 20px; }
+
+/* ── Semáforos de pedestres ── */
+.ped-light {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 6px;
+  z-index: 10;
+}
+.ped-indicator {
+  font-size: 20px;
+  filter: grayscale(100%);
+  opacity: 0.3;
+  transition: filter .4s, opacity .4s;
+}
+.ped-indicator.walk {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.ped-via-a { bottom: 20px; left: 20px; }
+.ped-via-b { bottom: 20px; right: 20px; }
+
+/* ============================================================
+   OVERLAY DE EMERGÊNCIA
+   ============================================================ */
+.emergency-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 20, 20, .12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  animation: emergency-pulse 1.5s infinite;
+}
+
+.emergency-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--red-on);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255, 32, 32, .6);
+  animation: blink-text 1s infinite;
+}
+.emergency-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--red-on);
+  letter-spacing: .08em;
+  margin-top: 6px;
+  opacity: .8;
+}
+
+@keyframes emergency-pulse {
+  0%, 100% { background: rgba(255, 20, 20, .08); }
+  50%      { background: rgba(255, 20, 20, .18); }
+}
+
+@keyframes blink-text {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .3; }
+}
+
+/* ============================================================
+   TABELA DE DECISÃO — Entradas Externas
+   ============================================================ */
+.td-justify {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: left !important;
+  letter-spacing: .03em;
+}
+
+/* ============================================================
+   DIAGRAMA DE GRAFO (SVG)
+   ============================================================ */
+.graph-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.graph-svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+/* Nós do grafo */
+.graph-node {
+  fill: var(--surface2);
+  stroke: var(--border2);
+  stroke-width: 2;
+  transition: fill .4s, stroke .4s;
+}
+.graph-node.active {
+  fill: rgba(64, 144, 255, .2);
+  stroke: var(--accent2);
+  filter: drop-shadow(0 0 8px rgba(64, 144, 255, .4));
+}
+
+/* Labels dos nós */
+.graph-node-label {
+  fill: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: .08em;
+}
+.graph-node-sub {
+  fill: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+/* Labels das arestas */
+.graph-edge-label {
+  fill: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* Legenda do grafo */
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.graph-legend-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.graph-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-e1 { background: var(--green-on); }
+.dot-e2 { background: var(--amber-on); }
+.dot-e3 { background: var(--accent2); }
+.dot-e4 { background: #ff8232; }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 600px) {
+  .main-header h1 {
+    font-size: 20px;
+  }
+  .control-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .control-buttons {
+    flex-direction: column;
+  }
+  .status-bar {
+    margin-left: 0;
+    justify-content: center;
+  }
+  .crossroad {
+    height: 320px;
+  }
+  .emergency-text {
+    font-size: 20px;
+  }
+  .graph-svg {
+    max-width: 280px;
+  }
+  .graph-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
