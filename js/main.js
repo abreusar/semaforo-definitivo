@@ -1,57 +1,54 @@
-/* ============================================================
-   MAIN.JS — Lógica do Semáforo Inteligente
-   A3 – Projeto Matemática Computacional Aplicada
-   ============================================================ */
+/* 
+   lógica do semáforo inteligente
+   cérebro do semáforo (estados, timer, controles)*/
 
-// ── Definição dos estados conforme o documento ──
-// Verde = 26s, Amarelo = 4s, Vermelho = 30s, Ciclo = 60s
+// definição dos estados conforme o documento 
+// verde = 26s, amarelo = 4s, vermelho = 30s, ciclo = 60s
 var STATES = {
-  E1: {                    // Via A aberta
+  E1: {                    // via A aberta
     duration: 26,
-    viaA: 'green',         // Via A: verde
-    viaB: 'red',           // Via B: vermelho
-    pedA: false,           // Pedestres Via A: vermelho
-    pedB: true,            // Pedestres Via B: verde
+    viaA: 'green',         // via A: verde
+    viaB: 'red',           // via B: vermelho
+    pedA: false,           // pedestres Via A: vermelho
+    pedB: true,            // pedestres Via B: verde
     next: 'E2'
   },
-  E2: {                    // Transição Via A
+  E2: {                    // transição Via A
     duration: 4,
-    viaA: 'yellow',        // Via A: amarelo
-    viaB: 'red',           // Via B: vermelho
-    pedA: false,           // Pedestres Via A: vermelho
-    pedB: true,            // Pedestres Via B: verde
+    viaA: 'yellow',        // via A: amarelo
+    viaB: 'red',           // via B: vermelho
+    pedA: false,           // pedestres Via A: vermelho
+    pedB: true,            // pedestres Via B: verde
     next: 'E3'
   },
-  E3: {                    // Via B aberta
+  E3: {                    // via B aberta
     duration: 26,
-    viaA: 'red',           // Via A: vermelho
-    viaB: 'green',         // Via B: verde
-    pedA: true,            // Pedestres Via A: verde
-    pedB: false,           // Pedestres Via B: vermelho
+    viaA: 'red',           // via A: vermelho
+    viaB: 'green',         // via B: verde
+    pedA: true,            // pedestres Via A: verde
+    pedB: false,           // pedestres Via B: vermelho
     next: 'E4'
   },
-  E4: {                    // Transição Via B
+  E4: {                    // transição Via B
     duration: 4,
-    viaA: 'red',           // Via A: vermelho
-    viaB: 'yellow',        // Via B: amarelo
-    pedA: true,            // Pedestres Via A: verde
-    pedB: false,           // Pedestres Via B: vermelho
+    viaA: 'red',           // via A: vermelho
+    viaB: 'yellow',        // via B: amarelo
+    pedA: true,            // pedestres via A: verde
+    pedB: false,           // pedestres via B: vermelho
     next: 'E1'
   }
 };
 
-// ── Variáveis globais ──
+// variáveis globais 
 var currentState = 'E1';
 var timeLeft = STATES.E1.duration;
 var timerInterval = null;
 var isEmergency = false;        // flag de emergência
 var pedestrianRequest = false;  // flag de pedestre solicitou
 
-// ============================================================
-// FUNÇÕES VISUAIS — Semáforos
-// ============================================================
+// FUNÇÕES VISUAIS - semáforos
 
-// Limpa todas as luzes de veículos
+// limpa todas as luzes de veículos
 function clearAllLights() {
   var allLights = document.querySelectorAll('.light');
   for (var i = 0; i < allLights.length; i++) {
@@ -59,14 +56,14 @@ function clearAllLights() {
   }
 }
 
-// Aplica o estado visual no cruzamento
+// aplica o estado visual no cruzamento
 function applyState(stateKey) {
   var state = STATES[stateKey];
 
-  // Limpa luzes
+  // limpa luzes
   clearAllLights();
 
-  // ── Semáforo Via A ──
+  //  semáforo via A 
   if (state.viaA === 'green') {
     document.getElementById('tl-a-green').classList.add('on');
   } else if (state.viaA === 'yellow') {
@@ -75,7 +72,7 @@ function applyState(stateKey) {
     document.getElementById('tl-a-red').classList.add('on');
   }
 
-  // ── Semáforo Via B ──
+  // semáforo via B 
   if (state.viaB === 'green') {
     document.getElementById('tl-b-green').classList.add('on');
   } else if (state.viaB === 'yellow') {
@@ -84,7 +81,7 @@ function applyState(stateKey) {
     document.getElementById('tl-b-red').classList.add('on');
   }
 
-  // ── Pedestres ──
+  // pedestres 
   var pedAIndicator = document.getElementById('ped-a-indicator');
   var pedBIndicator = document.getElementById('ped-b-indicator');
 
@@ -100,31 +97,29 @@ function applyState(stateKey) {
     pedBIndicator.classList.remove('walk');
   }
 
-  // ── Atualiza label do estado ──
+  // atualiza label do estado 
   var stateLabel = document.getElementById('currentStateLabel');
   if (stateLabel) {
     stateLabel.textContent = stateKey;
   }
 }
 
-// ============================================================
-// FUNÇÕES VISUAIS — Emergência
-// ============================================================
+// FUNÇÕES VISUAIS - emergência
 
-// Coloca todos os semáforos em vermelho
+// coloca todos os semáforos em vermelho
 function applyAllRed() {
   clearAllLights();
 
-  // Todos em vermelho
+  // todos em vermelho
   document.getElementById('tl-a-red').classList.add('on');
   document.getElementById('tl-b-red').classList.add('on');
 
-  // Todos os pedestres bloqueados
+  // todos os pedestres bloqueados
   document.getElementById('ped-a-indicator').classList.remove('walk');
   document.getElementById('ped-b-indicator').classList.remove('walk');
 }
 
-// Mostra/esconde o overlay de emergência
+// mostra/esconde o overlay de emergência
 function toggleEmergencyOverlay(show) {
   var overlay = document.getElementById('emergencyOverlay');
   var crossroad = document.getElementById('crossroad');
@@ -144,9 +139,7 @@ function toggleEmergencyOverlay(show) {
   }
 }
 
-// ============================================================
-// FUNÇÕES VISUAIS — Badge de pedestre
-// ============================================================
+// FUNÇÕES VISUAIS — badge de pedestre
 
 function showPedestrianBadge() {
   var badge = document.getElementById('pedBadge');
@@ -162,9 +155,7 @@ function hidePedestrianBadge() {
   }
 }
 
-// ============================================================
-// FUNÇÕES VISUAIS — Grafo SVG
-// ============================================================
+// FUNÇÕES VISUAIS — grafo SVG
 
 function updateGraph(stateKey) {
   var nodeIds = ['graph-E1', 'graph-E2', 'graph-E3', 'graph-E4'];
@@ -182,11 +173,9 @@ function updateGraph(stateKey) {
   }
 }
 
-// ============================================================
 // CONTADOR / TIMER
-// ============================================================
 
-// Atualiza o contador visual
+// atualiza o contador visual
 function updateCountdown() {
   var countdownLabel = document.getElementById('countdownLabel');
   if (countdownLabel) {
@@ -194,23 +183,23 @@ function updateCountdown() {
   }
 }
 
-// Tick do timer — chamado a cada 1 segundo
+// tick do timer - chamado a cada 1 segundo
 function tick() {
-  // Se está em emergência, não faz nada
+  // se está em emergência, não faz nada
   if (isEmergency) return;
 
   timeLeft--;
   updateCountdown();
 
   if (timeLeft <= 0) {
-    // Transição para o próximo estado
+    // transição para o próximo estado
     currentState = STATES[currentState].next;
     timeLeft = STATES[currentState].duration;
 
-    // Se o pedestre solicitou e entramos num estado verde (E1 ou E3),
+    // se o pedestre solicitou e entramos num estado verde (E1 ou E3),
     // a solicitação é consumida (pedestre já está sendo atendido no próximo ciclo)
     if (pedestrianRequest && (currentState === 'E2' || currentState === 'E4')) {
-      // Chegou no amarelo após o verde — pedestre será liberado no próximo estado
+      // chegou no amarelo após o verde = pedestre será liberado no próximo estado
       pedestrianRequest = false;
       hidePedestrianBadge();
     }
@@ -218,21 +207,19 @@ function tick() {
     applyState(currentState);
     updateCountdown();
 
-    // Atualiza seção acadêmica
+    // atualiza seção acadêmica
     if (typeof updateAcademicSection === 'function') {
       updateAcademicSection(currentState);
     }
 
-    // Atualiza grafo
+    // atualiza grafo
     updateGraph(currentState);
   }
 }
 
-// ============================================================
 // CONTROLES PRINCIPAIS
-// ============================================================
 
-// ── Iniciar sistema ──
+// iniciar sistema 
 window.startSystem = function () {
   // Se está em emergência, desativa primeiro
   if (isEmergency) {
@@ -240,38 +227,38 @@ window.startSystem = function () {
     toggleEmergencyOverlay(false);
   }
 
-  // Limpa timer anterior
+  // limpa timer anterior
   if (timerInterval) clearInterval(timerInterval);
 
-  // Reset
+  // reset
   currentState = 'E1';
   timeLeft = STATES[currentState].duration;
   pedestrianRequest = false;
   hidePedestrianBadge();
 
-  // Aplica estado visual
+  // aplica estado visual
   applyState(currentState);
   updateCountdown();
   updateGraph(currentState);
 
-  // Atualiza seção acadêmica
+  // atualiza seção acadêmica
   if (typeof updateAcademicSection === 'function') {
     updateAcademicSection(currentState);
   }
 
-  // Inicia timer
+  // inicia timer
   timerInterval = setInterval(tick, 1000);
 };
 
-// ── Próximo estado (manual) ──
+// próximo estado (manual) 
 window.nextState = function () {
-  // Se está em emergência, ignora
+  // se está em emergência, ignora
   if (isEmergency) return;
 
   currentState = STATES[currentState].next;
   timeLeft = STATES[currentState].duration;
 
-  // Consome pedestre se aplicável
+  // consome pedestre se aplicável
   if (pedestrianRequest && (currentState === 'E2' || currentState === 'E4')) {
     pedestrianRequest = false;
     hidePedestrianBadge();
@@ -286,21 +273,21 @@ window.nextState = function () {
   }
 };
 
-// ── Pedestre solicita travessia ──
-// Lógica: se o sistema está num estado verde (E1 ou E3),
+// pedestre solicita travessia 
+// lógica: se o sistema está num estado verde (E1 ou E3),
 // reduz o tempo restante para 5s, acelerando a transição
 // para liberar os pedestres mais rapidamente.
 window.requestPedestrian = function () {
-  // Se está em emergência, ignora
+  // se está em emergência, ignora
   if (isEmergency) return;
 
-  // Se já solicitou, ignora
+  // se já solicitou, ignora
   if (pedestrianRequest) return;
 
   pedestrianRequest = true;
   showPedestrianBadge();
 
-  // Se está num estado verde (E1 ou E3) com mais de 5s restantes,
+  // se está num estado verde (E1 ou E3) com mais de 5s restantes,
   // reduz o tempo para acelerar a transição
   if ((currentState === 'E1' || currentState === 'E3') && timeLeft > 5) {
     timeLeft = 5;
@@ -308,25 +295,25 @@ window.requestPedestrian = function () {
   }
 };
 
-// ── Modo emergência (toggle) ──
+// modo emergência (toggle) 
 // Lógica: todos os semáforos ficam vermelho,
 // todos os pedestres ficam bloqueados,
 // o timer para. Clicar novamente retoma o ciclo.
 window.toggleEmergency = function () {
   if (!isEmergency) {
-    // ── ATIVAR EMERGÊNCIA ──
+    //  ATIVAR EMERGÊNCIA 
     isEmergency = true;
 
-    // Para o timer
+    // para o timer
     if (timerInterval) {
       clearInterval(timerInterval);
       timerInterval = null;
     }
 
-    // Todos em vermelho
+    // todos em vermelho
     applyAllRed();
 
-    // Atualiza label
+    // atualiza label
     var stateLabel = document.getElementById('currentStateLabel');
     if (stateLabel) {
       stateLabel.textContent = 'EMRG';
@@ -337,21 +324,21 @@ window.toggleEmergency = function () {
       countdownLabel.textContent = '--';
     }
 
-    // Mostra overlay
+    // mostra overlay
     toggleEmergencyOverlay(true);
 
-    // Limpa pedestre
+    // limpa pedestre
     pedestrianRequest = false;
     hidePedestrianBadge();
 
   } else {
-    // ── DESATIVAR EMERGÊNCIA ──
+    // DESATIVAR EMERGÊNCIA 
     isEmergency = false;
 
-    // Esconde overlay
+    // esconde overlay
     toggleEmergencyOverlay(false);
 
-    // Retoma o ciclo do estado atual
+    // retoma o ciclo do estado atual
     applyState(currentState);
     updateCountdown();
     updateGraph(currentState);
@@ -360,17 +347,15 @@ window.toggleEmergency = function () {
       updateAcademicSection(currentState);
     }
 
-    // Reinicia o timer
+    // reinicia o timer
     timerInterval = setInterval(tick, 1000);
   }
 };
 
-// ============================================================
 // INICIALIZAÇÃO
-// ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Aplica estado inicial (E1) sem iniciar o timer
+  // aplica estado inicial (E1) sem iniciar o timer
   applyState(currentState);
   updateCountdown();
   updateGraph(currentState);

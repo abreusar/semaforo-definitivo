@@ -1,6 +1,5 @@
-/* ============================================================
-   SEÇÃO ACADÊMICA — Painéis Teóricos
-   ============================================================ */
+/* SEÇÃO ACADÊMICA — painéis teóricos
+   visual da seção acadêmica (tabelas, lógica, MEF)*/
 
 .academic-section {
   max-width: 900px;
@@ -11,7 +10,7 @@
   gap: 16px;
 }
 
-/* ── Card base ── */
+/* card base */
 .acad-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -53,7 +52,7 @@
   color: var(--accent);
 }
 
-/* ── Tabelas ── */
+/* tabelas */
 .table-wrapper {
   overflow-x: auto;
   margin-top: 4px;
@@ -93,7 +92,7 @@
 .val-on  { color: var(--green-on) !important; font-weight: 700; }
 .val-off { color: var(--text-dim) !important; }
 
-/* ── Badges de estado ── */
+/* badges de estado */
 .badge {
   display: inline-block;
   padding: 2px 10px;
@@ -107,7 +106,7 @@
 .badge-e3 { background: rgba(64, 144, 255, .15); color: var(--accent2); border: 1px solid var(--accent2); }
 .badge-e4 { background: rgba(255, 130, 50, .15); color: #ff8232; border: 1px solid #ff8232; }
 
-/* ── Tags de cor (Verde/Amarelo/Vermelho) ── */
+/* tags de cor (verde/amarelo/vermelho) */
 .color-tag {
   display: inline-block;
   padding: 1px 8px;
@@ -120,7 +119,7 @@
 .color-tag.amarelo  { background: rgba(255, 170, 0, .15); color: var(--amber-on); }
 .color-tag.vermelho { background: rgba(255, 32, 32, .15); color: var(--red-on); }
 
-/* ── Tabela de Decisão (entradas externas) ── */
+/* tabela de decisão (entradas externas) ── */
 .td-justify {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -129,7 +128,7 @@
   letter-spacing: .03em;
 }
 
-/* ── Lógica Proposicional ── */
+/* lógica proposicional ── */
 .logic-rules {
   display: flex;
   flex-direction: column;
@@ -188,7 +187,7 @@
   letter-spacing: .04em;
 }
 
-/* ── MEF (Máquina de Estados Finitos) ── */
+/* MEF (maquina de estados finitos) */
 .fsm-definition {
   display: flex;
   flex-direction: column;
@@ -289,7 +288,7 @@
   border-radius: 3px;
 }
 
-/* ── Diagrama de Grafo Direcionado (SVG) ── */
+/* diagrama de grafo direcionado (SVG) ── */
 .graph-container {
   display: flex;
   justify-content: center;
@@ -301,7 +300,7 @@
   height: auto;
 }
 
-/* Nós do grafo */
+/* nós do grafo */
 .graph-node {
   fill: var(--surface2);
   stroke: var(--border2);
@@ -314,7 +313,7 @@
   filter: drop-shadow(0 0 8px rgba(64, 144, 255, .4));
 }
 
-/* Labels dos nós */
+/* labels dos nós */
 .graph-node-label {
   fill: var(--text);
   font-family: 'Share Tech Mono', monospace;
@@ -330,7 +329,7 @@
   text-anchor: middle;
 }
 
-/* Labels das arestas */
+/* labels das arestas */
 .graph-edge-label {
   fill: var(--accent);
   font-family: 'Share Tech Mono', monospace;
@@ -339,7 +338,7 @@
   text-anchor: middle;
 }
 
-/* Legenda do grafo */
+/* legenda do grafo */
 .graph-legend {
   display: flex;
   flex-wrap: wrap;
@@ -370,7 +369,7 @@
 .dot-e3 { background: var(--accent2); }
 .dot-e4 { background: #ff8232; }
 
-/* ── Teoria dos Conjuntos ── */
+/* teoria dos conjuntos */
 .sets-group {
   margin-bottom: 14px;
 }
@@ -418,7 +417,7 @@
   font-weight: 700;
 }
 
-/* ── Pertencimento dinâmico ── */
+/* pertencimento dinâmico */
 .set-membership {
   display: flex;
   flex-direction: column;
@@ -448,7 +447,7 @@
   text-align: center;
 }
 
-/* ── Responsivo ── */
+/* responsivo */
 @media (max-width: 600px) {
   .academic-section { padding: 10px; }
   .acad-card { padding: 14px 12px; }

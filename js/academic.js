@@ -1,13 +1,12 @@
 
-/* ============================================================
-   ACADEMIC.JS — Seção Acadêmica (tabelas, lógica, MEF, conjuntos)
-   A3 – Projeto Matemática Computacional Aplicada
-   ============================================================ */
+/* 
+   ACADEMIC.JS - seção Acadêmica (tabelas, lógica, MEF, conjuntos)
+   cérebro da seção acadêmica (validações, conjuntos) */
 
-// ── Variáveis binárias de cada estado ──
-// A=1 → Via A verde, B=1 → Via B verde
-// PA=1 → Pedestre Via A livre, PB=1 → Pedestre Via B livre
-// YA=1 → Via A amarelo, YB=1 → Via B amarelo
+// variáveis binárias de cada estado
+// A=1 > via A verde, B=1 > via B verde
+// PA=1 > pedestre via A livre, PB=1 > pedestre via B livre
+// YA=1 > via A amarelo, YB=1 > via B amarelo
 var STATE_VARS = {
   E1: { A: 1, B: 0, PA: 0, PB: 1, YA: 0, YB: 0 },
   E2: { A: 0, B: 0, PA: 0, PB: 1, YA: 1, YB: 0 },
@@ -15,7 +14,7 @@ var STATE_VARS = {
   E4: { A: 0, B: 0, PA: 1, PB: 0, YA: 0, YB: 1 }
 };
 
-// ── Conjuntos: estados onde cada variável = 1 ──
+// conjuntos: estados onde cada variável = 1 
 var SETS_ACAD = {
   A:  ['E1'],
   B:  ['E3'],
@@ -25,12 +24,11 @@ var SETS_ACAD = {
   YB: ['E4']
 };
 
-// ============================================================
-// 1. TABELAS — Destaca a linha do estado atual
-// ============================================================
+
+// 1. TABELAS - destaca a linha do estado atual
 
 function highlightTableRows(stateKey) {
-  // Tabela binária
+  // tabela binária
   var binaryRows = document.querySelectorAll('#binaryTable tbody tr');
   for (var i = 0; i < binaryRows.length; i++) {
     if (binaryRows[i].dataset.state === stateKey) {
@@ -40,7 +38,7 @@ function highlightTableRows(stateKey) {
     }
   }
 
-  // Tabela-verdade
+  // tabela-verdade
   var truthRows = document.querySelectorAll('#truthTable tbody tr');
   for (var j = 0; j < truthRows.length; j++) {
     if (truthRows[j].dataset.state === stateKey) {
@@ -51,14 +49,12 @@ function highlightTableRows(stateKey) {
   }
 }
 
-// ============================================================
-// 2. LÓGICA PROPOSICIONAL — Valida regras em tempo real
-// ============================================================
+// 2. LÓGICA PROPOSICIONAL - valida regras em tempo real
 
 function updateLogicRules(stateKey) {
   var v = STATE_VARS[stateKey];
 
-  // ── Regra 1: ¬(A ∧ B) — duas vias nunca abrem juntas ──
+  // regra 1: ¬(A ∧ B) - duas vias nunca abrem juntas 
   var r1 = !(v.A && v.B);
   var el1 = document.getElementById('rule1');
   var icon1 = document.getElementById('rule1-icon');
@@ -80,7 +76,7 @@ function updateLogicRules(stateKey) {
       ' | ' + r1text;
   }
 
-  // ── Regra 2: PA = ¬A ∧ ¬YA ──
+  // regra 2: PA = ¬A ∧ ¬YA 
   var expectedPA = (!v.A && !v.YA) ? 1 : 0;
   var r2 = (v.PA === expectedPA);
   var el2 = document.getElementById('rule2');
@@ -101,7 +97,7 @@ function updateLogicRules(stateKey) {
       ' | ' + r2text;
   }
 
-  // ── Regra 3: PB = ¬B ∧ ¬YB ──
+  // regra 3: PB = ¬B ∧ ¬YB 
   var expectedPB = (!v.B && !v.YB) ? 1 : 0;
   var r3 = (v.PB === expectedPB);
   var el3 = document.getElementById('rule3');
@@ -123,9 +119,7 @@ function updateLogicRules(stateKey) {
   }
 }
 
-// ============================================================
-// 3. MEF — Destaca o nó ativo no diagrama de estados
-// ============================================================
+// 3. MEF - destaca o nó ativo no diagrama de estados
 
 function updateFSM(stateKey) {
   var nodes = document.querySelectorAll('.fsm-node');
@@ -138,9 +132,7 @@ function updateFSM(stateKey) {
   }
 }
 
-// ============================================================
-// 4. GRAFO SVG — Destaca o nó ativo no grafo direcionado
-// ============================================================
+// 4. GRAFO SVG - destaca o nó ativo no grafo direcionado
 
 function updateGraphAcademic(stateKey) {
   var nodeIds = ['graph-E1', 'graph-E2', 'graph-E3', 'graph-E4'];
@@ -157,22 +149,20 @@ function updateGraphAcademic(stateKey) {
   }
 }
 
-// ============================================================
-// 5. TEORIA DOS CONJUNTOS — Pertencimento dinâmico
-// ============================================================
+// 5. TEORIA DOS CONJUNTOS - pertencimento dinâmico
 
 function updateSetMembership(stateKey) {
-  // Atualiza o label do estado atual
+  // atualiza o label do estado atual
   var elCurrent = document.getElementById('setCurrentState');
   if (elCurrent) {
     elCurrent.textContent = stateKey;
   }
 
-  // Container de pertencimento
+  // container de pertencimento
   var container = document.getElementById('setMembership');
   if (!container) return;
 
-  // Labels descritivos de cada variável
+  // labels descritivos de cada variável
   var labels = {
     A:  'A (Via A verde)',
     B:  'B (Via B verde)',
@@ -188,7 +178,7 @@ function updateSetMembership(stateKey) {
   for (var i = 0; i < varNames.length; i++) {
     var varName = varNames[i];
 
-    // Verifica se o estado atual pertence ao conjunto
+    // verifica se o estado atual pertence ao conjunto
     var isMember = (SETS_ACAD[varName].indexOf(stateKey) !== -1);
 
     var symbol, cssClass;
@@ -210,23 +200,21 @@ function updateSetMembership(stateKey) {
   container.innerHTML = html;
 }
 
-// ============================================================
-// 6. FUNÇÃO PRINCIPAL — Chamada pelo main.js a cada mudança
-// ============================================================
+// 6. FUNÇÃO PRINCIPAL - chamada pelo main.js a cada mudança
 
 function updateAcademicSection(stateKey) {
-  // 1. Destaca linhas nas tabelas (binária + verdade)
+  //  destaca linhas nas tabelas (binária + verdade)
   highlightTableRows(stateKey);
 
-  // 2. Valida e exibe regras de lógica proposicional
+  // valida e exibe regras de lógica proposicional
   updateLogicRules(stateKey);
 
-  // 3. Destaca nó ativo na MEF (diagrama CSS)
+  // destaca nó ativo na MEF (diagrama CSS)
   updateFSM(stateKey);
 
-  // 4. Destaca nó ativo no grafo SVG
+  // destaca nó ativo no grafo SVG
   updateGraphAcademic(stateKey);
 
-  // 5. Atualiza pertencimento na teoria dos conjuntos
+  // atualiza pertencimento na teoria dos conjuntos
   updateSetMembership(stateKey);
 }

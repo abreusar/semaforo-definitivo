@@ -1,28 +1,27 @@
+<!-- estrutura da página -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Semáforo Inteligente — A3 Matemática Computacional</title>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-
-  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/academic.css" />
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
+  <!--HEADER -->
   <header class="main-header">
     <h1>🚦 Semáforo Inteligente</h1>
     <p class="subtitle">A3 — Matemática Computacional Aplicada</p>
   </header>
 
-  <!-- ===== PAINEL DE CONTROLE ===== -->
+  <!-- PAINEL DE CONTROLE (parte 1)
+    Cada botão chama uma função JavaScript quando clicado: -->
+   
   <section class="control-panel">
     <div class="control-buttons">
       <button id="btnStart" onclick="startSystem()">▶ Iniciar</button>
@@ -30,6 +29,8 @@
       <button id="btnPed" class="btn-ped" onclick="requestPedestrian()">🚶 Pedestre Solicita</button>
       <button id="btnEmergency" class="btn-emergency" onclick="toggleEmergency()">🚨 Emergência</button>
     </div>
+
+    <!--KPIS titulo-->
     <div class="status-bar">
       <span class="status-label">Estado:</span>
       <span class="status-value" id="currentStateLabel">E1</span>
@@ -40,11 +41,11 @@
     </div>
   </section>
 
-  <!-- ===== SIMULAÇÃO VISUAL DO CRUZAMENTO ===== -->
+  <!-- SIMULAÇÃO VISUAL DO CRUZAMENTO  -->
   <section class="simulation-section">
     <div class="crossroad" id="crossroad">
 
-      <!-- Semáforo Via A (veículos) -->
+      <!-- semaforo via A (veículos) -->
       <div class="traffic-light tl-via-a" id="tlViaA">
         <span class="tl-label">Via A</span>
         <div class="light red" id="tl-a-red"></div>
@@ -52,7 +53,7 @@
         <div class="light green" id="tl-a-green"></div>
       </div>
 
-      <!-- Semáforo Via B (veículos) -->
+      <!-- semaforo via B (veículos) -->
       <div class="traffic-light tl-via-b" id="tlViaB">
         <span class="tl-label">Via B</span>
         <div class="light red" id="tl-b-red"></div>
@@ -60,19 +61,19 @@
         <div class="light green" id="tl-b-green"></div>
       </div>
 
-      <!-- Semáforo Pedestres Via A -->
+      <!-- semaforo pedestres via A -->
       <div class="ped-light ped-via-a" id="pedViaA">
         <span class="tl-label">Ped A</span>
         <div class="ped-indicator" id="ped-a-indicator">🚶</div>
       </div>
 
-      <!-- Semáforo Pedestres Via B -->
+      <!-- semaforo pedestres via B -->
       <div class="ped-light ped-via-b" id="pedViaB">
         <span class="tl-label">Ped B</span>
         <div class="ped-indicator" id="ped-b-indicator">🚶</div>
       </div>
 
-      <!-- Ruas visuais -->
+      <!-- ruas visuais -->
       <div class="road road-horizontal">
         <span class="road-label">Via A (Leste → Oeste)</span>
       </div>
@@ -81,7 +82,7 @@
       </div>
       <div class="intersection"></div>
 
-      <!-- Overlay de emergência -->
+      <!-- overlay de emergência -->
       <div class="emergency-overlay hidden" id="emergencyOverlay">
         <span class="emergency-text">🚨 EMERGÊNCIA 🚨</span>
         <span class="emergency-sub">Todos os semáforos em VERMELHO</span>
@@ -89,10 +90,10 @@
     </div>
   </section>
 
-  <!-- ===== SEÇÃO ACADÊMICA ===== -->
+  <!--  SEÇÃO ACADÊMICA (parte 2) -->
   <section class="academic-section">
 
-    <!-- ── 1. Representação Binária ── -->
+    <!-- representação binária ── -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -163,7 +164,7 @@
       </div>
     </div>
 
-    <!-- ── 2. Tabela-Verdade / Tabela de Decisão ── -->
+    <!-- tabela-verdade / tabela de decisão -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -216,7 +217,7 @@
       </div>
     </div>
 
-    <!-- ── 3. NOVO: Tabela de Decisão com Entradas Externas ── -->
+    <!-- tabela de decisão com entradas externas ── -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -293,7 +294,7 @@
       </p>
     </div>
 
-    <!-- ── 4. Lógica Proposicional ── -->
+    <!-- lógica proposicional ── -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -330,7 +331,7 @@
       </div>
     </div>
 
-    <!-- ── 5. Máquina de Estados Finitos ── -->
+    <!-- máquina de estados finitos ── -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -379,7 +380,7 @@
       </div>
     </div>
 
-    <!-- ── 6. NOVO: Diagrama de Grafo Direcionado (SVG) ── -->
+    <!-- diagrama de Grafo Direcionado (SVG) -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -392,7 +393,7 @@
       </p>
       <div class="graph-container">
         <svg viewBox="0 0 400 400" class="graph-svg" id="graphSvg">
-          <!-- Setas (arestas) -->
+          <!-- setas (arestas) -->
           <defs>
             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
               <polygon points="0 0, 10 3.5, 0 7" fill="#4090ff" />
@@ -410,7 +411,7 @@
           <!-- E4 → E1 (esquerda) -->
           <line x1="110" y1="255" x2="110" y2="125" stroke="#4090ff" stroke-width="2" marker-end="url(#arrowhead)" />
           <text x="60" y="185" class="graph-edge-label">4s</text>
-          <!-- Nós -->
+          <!-- nós -->
           <circle cx="110" cy="80" r="38" class="graph-node" id="graph-E1" />
           <text x="110" y="75" class="graph-node-label">E1</text>
           <text x="110" y="95" class="graph-node-sub">Via A ●</text>
@@ -433,7 +434,7 @@
       </div>
     </div>
 
-    <!-- ── 7. Teoria dos Conjuntos ── -->
+    <!-- teoria dos conjuntos ── -->
     <div class="acad-card">
       <div class="acad-header">
         <span class="acad-icon"></span>
@@ -489,14 +490,13 @@
       <div class="sets-group">
         <h3 class="sets-title">Pertencimento (estado atual: <span id="setCurrentState" class="set-highlight">E1</span>)</h3>
         <div class="set-membership" id="setMembership">
-          <!-- Preenchido pelo JS -->
         </div>
       </div>
     </div>
 
   </section>
 
-  <!-- ===== JS — main.js ANTES de academic.js ===== -->
+  <!-- main.js ANTES de academic.js -->
   <script src="js/main.js"></script>
   <script src="js/academic.js"></script>
 </body>

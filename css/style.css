@@ -1,6 +1,6 @@
-/* ============================================================
+/* 
    VARIÁVEIS GLOBAIS (tema escuro)
-   ============================================================ */
+   visual geral (tema, layout, simulação) */
 :root {
   --bg: #0d1117;
   --surface: #161b22;
@@ -16,7 +16,7 @@
   --red-on: #ff2020;
 }
 
-/* ── Reset & Base ── */
+/* reset e base */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -31,14 +31,12 @@ body {
   line-height: 1.5;
 }
 
-/* Classe utilitária para esconder elementos */
+/* classe utilitária para esconder elementos */
 .hidden {
   display: none !important;
 }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
+/* HEADER */
 .main-header {
   text-align: center;
   padding: 30px 20px 10px;
@@ -57,9 +55,7 @@ body {
   margin-top: 4px;
 }
 
-/* ============================================================
-   PAINEL DE CONTROLE
-   ============================================================ */
+/* PAINEL DE CONTROLE */
 .control-panel {
   max-width: 900px;
   margin: 16px auto;
@@ -79,7 +75,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* ── Botões base ── */
+/* botões base  */
 .control-panel button,
 .control-buttons button {
   font-family: 'Barlow Condensed', sans-serif;
@@ -101,7 +97,7 @@ body {
   color: #fff;
 }
 
-/* ── Botão Pedestre ── */
+/*  botão pedestre  */
 .btn-ped {
   border-color: var(--green-on) !important;
   color: var(--green-on) !important;
@@ -112,7 +108,7 @@ body {
   color: #fff !important;
 }
 
-/* ── Botão Emergência ── */
+/*  botão emergência  */
 .btn-emergency {
   border-color: var(--red-on) !important;
   color: var(--red-on) !important;
@@ -133,7 +129,7 @@ body {
   50% { box-shadow: 0 0 16px 4px rgba(255, 32, 32, .6); }
 }
 
-/* ── Barra de Status ── */
+/* barra de status  */
 .status-bar {
   margin-left: auto;
   display: flex;
@@ -152,7 +148,7 @@ body {
   min-width: 30px;
 }
 
-/* ── Badges de status (pedestre / emergência) ── */
+/* badges de status (pedestre / emergência)  */
 .status-badge {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -184,9 +180,7 @@ body {
   50%      { opacity: .4; }
 }
 
-/* ============================================================
-   SIMULAÇÃO VISUAL DO CRUZAMENTO
-   ============================================================ */
+/* SIMULAÇÃO VISUAL DO CRUZAMENTO*/
 .simulation-section {
   max-width: 900px;
   margin: 0 auto;
@@ -206,13 +200,13 @@ body {
   transition: border-color .4s;
 }
 
-/* Borda vermelha quando em emergência */
+/* borda vermelha quando em emergência */
 .crossroad.emergency-active {
   border-color: var(--red-on);
   box-shadow: 0 0 20px rgba(255, 32, 32, .2);
 }
 
-/* ── Ruas ── */
+/* ruas  */
 .road {
   position: absolute;
   background: #1a2233;
@@ -256,7 +250,7 @@ body {
   border: 1px solid var(--border2);
 }
 
-/* ── Semáforos de veículos ── */
+/* semaforos de veículos  */
 .traffic-light {
   position: absolute;
   display: flex;
@@ -288,11 +282,11 @@ body {
 .light.yellow.on { background: var(--amber-on); box-shadow: 0 0 12px var(--amber-on); }
 .light.green.on  { background: var(--green-on); box-shadow: 0 0 12px var(--green-on); }
 
-/* Posições dos semáforos */
+/* posições dos semáforos */
 .tl-via-a { top: 20px;  left: 20px; }
 .tl-via-b { top: 20px;  right: 20px; }
 
-/* ── Semáforos de pedestres ── */
+/* semáforos de pedestres */
 .ped-light {
   position: absolute;
   display: flex;
@@ -319,9 +313,7 @@ body {
 .ped-via-a { bottom: 20px; left: 20px; }
 .ped-via-b { bottom: 20px; right: 20px; }
 
-/* ============================================================
-   OVERLAY DE EMERGÊNCIA
-   ============================================================ */
+/* overlay de emergencia */
 .emergency-overlay {
   position: absolute;
   top: 0;
@@ -366,9 +358,7 @@ body {
   50%      { opacity: .3; }
 }
 
-/* ============================================================
-   TABELA DE DECISÃO — Entradas Externas
-   ============================================================ */
+/* TABELA DE DECISÃO - entradas externas */
 .td-justify {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -377,9 +367,7 @@ body {
   letter-spacing: .03em;
 }
 
-/* ============================================================
-   DIAGRAMA DE GRAFO (SVG)
-   ============================================================ */
+/* DIAGRAMA DE GRAFO (SVG) */
 .graph-container {
   display: flex;
   justify-content: center;
@@ -405,7 +393,7 @@ body {
   filter: drop-shadow(0 0 8px rgba(64, 144, 255, .4));
 }
 
-/* Labels dos nós */
+/* labels dos nós */
 .graph-node-label {
   fill: var(--text);
   font-family: 'Share Tech Mono', monospace;
@@ -421,7 +409,7 @@ body {
   text-anchor: middle;
 }
 
-/* Labels das arestas */
+/* labels das arestas */
 .graph-edge-label {
   fill: var(--accent);
   font-family: 'Share Tech Mono', monospace;
@@ -430,7 +418,7 @@ body {
   text-anchor: middle;
 }
 
-/* Legenda do grafo */
+/* legenda do grafo */
 .graph-legend {
   display: flex;
   flex-wrap: wrap;
@@ -461,9 +449,7 @@ body {
 .dot-e3 { background: var(--accent2); }
 .dot-e4 { background: #ff8232; }
 
-/* ============================================================
-   RESPONSIVO
-   ============================================================ */
+/* RESPONSIVO */
 @media (max-width: 600px) {
   .main-header h1 {
     font-size: 20px;
