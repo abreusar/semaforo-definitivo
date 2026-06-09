@@ -14,7 +14,7 @@ var STATES = {
     next: 'E2'
   },
   E2: {                    // transição Via A
-    duration: 4,
+    duration: 10,
     viaA: 'yellow',        // via A: amarelo
     viaB: 'red',           // via B: vermelho
     pedA: false,           // pedestres Via A: vermelho
@@ -30,7 +30,7 @@ var STATES = {
     next: 'E4'
   },
   E4: {                    // transição Via B
-    duration: 4,
+    duration: 10,
     viaA: 'red',           // via A: vermelho
     viaB: 'yellow',        // via B: amarelo
     pedA: true,            // pedestres via A: verde
